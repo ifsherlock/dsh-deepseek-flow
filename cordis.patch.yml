@@ -1,0 +1,6 @@
+# dsh-deepseek-flow bundle patch: inserts the plugin's row into the profile's
+# plugin roster. The row is a normal client plugin (dsh.client in package.json),
+# so mounting it also brings up its browser half.
+- insert:
+    - id: deepseek-flow
+      name: 'dsh-deepseek-flow'

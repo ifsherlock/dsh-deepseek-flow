@@ -1,0 +1,47 @@
+{
+  "name": "dsh-deepseek-flow",
+  "version": "1.0.0",
+  "description": "DeepSeek 官网首屏的流动光场背景（逐像素复刻 deepseek.com 的 WebGL pattern shader），作为 DeepSeek Harness Web GUI 的动态壁纸。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "icon": "./icon.svg",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "theme",
+    "background",
+    "webgl"
+  ],
+  "author": "ifsherlock",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ifsherlock/dsh-deepseek-flow.git"
+  },
+  "homepage": "https://github.com/ifsherlock/dsh-deepseek-flow#readme",
+  "files": [
+    "lib",
+    "icon.svg",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    },
+    "manifestVersion": 1
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.3"
+  }
+}
