@@ -65,6 +65,7 @@ dsh plugin --profile desktop add github:ifsherlock/dsh-deepseek-flow
 | `intensity` | 0–100 | `100` | 形变与涡流强度；0 时凝固成官网的静止帧，100 为官网原样 |
 | `opacity` | 0–100 | `100` | 壁纸不透明度，调低向页面底色淡出 |
 | `scrim` | 0–100 | `6` | 可读性薄纱百分比 |
+| `cardOpacity` | 0–100 | `20` | 输入框玻璃白度，20 即官网 `hsla(0,0%,100%,.2)` |
 
 宿主侧提供一个同源接口供读取/写入：
 
@@ -73,6 +74,32 @@ GET  /api/deepseek-flow/settings
 POST /api/deepseek-flow/settings
 ```
 
+## 输入框玻璃
+
+官网首屏的输入框是一块玻璃：
+
+```css
+/* .ds-glass-card.ds-input-wrapper */
+background-color: hsla(0, 0%, 100%, .2);   /* --ds-color-bg-input */
+border: 2px solid hsla(0, 0%, 100%, .8);
+backdrop-filter: blur(12px);               /* --ds-blur-glass */
+:hover, :focus-within → hsla(0, 0%, 100%, .36) + border hsla(0, 0%, 100%, .25)
+```
+
+dsh 用 `--dsw-specific-input-major` 画同一个输入卡，浅色主题下它就是纯白
+`#fff`（深色主题 `#2c2c2e`）——那层不透明填充会把壁纸完全挡住。插件把这张卡
+换成官网配方，于是流动光场能透出来。
+
+两个实现细节，都是踩过坑之后才这么写的：
+
+1. **透明底和模糊都放在 `::before` 上，卡片本身设为透明。** 如果把底色留在卡片上，
+   `::before` 的 `backdrop-filter` 会先采样到卡片自己的白色，玻璃就糊成一片灰。
+2. **模糊不能放在卡片自身。** 卡片的 `backdrop-filter` 会把它的后代一起捕获，
+   导致渲染在卡内的斜杠菜单、附件弹层失去通透感；伪元素不是它们的祖先，
+   所以它们继续直接采样页面。
+
+深色主题下按官网比例降到 8%（由同一个滑块推导），拖到 0 就是完全透明。
+
 ## 设置界面
 
 设置 → 通用 里有一行 **DeepSeek 流动背景**，位于「外观」附近：
@@ -80,7 +107,7 @@ POST /api/deepseek-flow/settings
 - **实时预览卡**：卡片里跑的是真正的着色器（独立的迷你 WebGL 上下文），
   拖动滑块立刻看到效果，不是静态示意图。
 - **开关**：右上角开关即时启停壁纸。
-- **四个滑块**：流动速度、形变强度、壁纸不透明度、可读性薄纱。
+- **五个滑块**：流动速度、形变强度、壁纸不透明度、可读性薄纱、输入框玻璃。
 - 拖动时只改画面、**松手才保存**（每次手势一次写入）；保存失败会在行内提示。
 
 滑块样式全部使用 `--dsw-alias-*` 设计 token，和官方设置项一致。
