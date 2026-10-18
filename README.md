@@ -63,9 +63,8 @@ dsh plugin --profile desktop add github:ifsherlock/dsh-deepseek-flow
 | `enabled` | bool | `true` | 总开关 |
 | `speed` | 0–100 | `14` | 流动速度，14 即官网原速 |
 | `intensity` | 0–100 | `100` | 形变与涡流强度；0 时凝固成官网的静止帧，100 为官网原样 |
+| `opacity` | 0–100 | `100` | 壁纸不透明度，调低向页面底色淡出 |
 | `scrim` | 0–100 | `6` | 可读性薄纱百分比 |
-| `panelOpacity` | 0–100 | `18` | 面板透明程度（100 恢复官方不透明） |
-| `darkMode` | `auto`/`light`/`dark` | `auto` | 预留的配色模式 |
 
 宿主侧提供一个同源接口供读取/写入：
 
@@ -73,6 +72,18 @@ dsh plugin --profile desktop add github:ifsherlock/dsh-deepseek-flow
 GET  /api/deepseek-flow/settings
 POST /api/deepseek-flow/settings
 ```
+
+## 设置界面
+
+设置 → 通用 里有一行 **DeepSeek 流动背景**，位于「外观」附近：
+
+- **实时预览卡**：卡片里跑的是真正的着色器（独立的迷你 WebGL 上下文），
+  拖动滑块立刻看到效果，不是静态示意图。
+- **开关**：右上角开关即时启停壁纸。
+- **四个滑块**：流动速度、形变强度、壁纸不透明度、可读性薄纱。
+- 拖动时只改画面、**松手才保存**（每次手势一次写入）；保存失败会在行内提示。
+
+滑块样式全部使用 `--dsw-alias-*` 设计 token，和官方设置项一致。
 
 ## 卸载
 
